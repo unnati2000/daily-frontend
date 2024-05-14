@@ -8,15 +8,17 @@ const FolderPage = () => {
   const [shouldFlyOutside, setShouldFlyOutside] = useState(false);
 
   return (
-    <div className="flex flex-col cursor-pointer h-screen w-screen justify-center items-center">
+    <div className="flex bg-zinc-200 flex-col cursor-pointer h-screen w-screen justify-center items-center">
       <div
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="border relative border-yellow-300 h-24 w-44 bg-yellow-800"
+        className="border rounded-xl relative border-yellow-600 h-24 w-44 bg-yellow-400"
         onClick={() => setShouldFlyOutside(!shouldFlyOutside)}
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, #efe309, #efd706, #efcc08, #edc00c, #ebb512)",
+        }}
       >
-        {/* <div className="border absolute border-red-300 h-16 w-32 bottom-0"></div> */}
-
         <motion.div
           animate={{
             top: shouldFlyOutside ? "-140px" : hover ? "-20px" : 0,
@@ -24,10 +26,8 @@ const FolderPage = () => {
             scale: shouldFlyOutside ? 1.5 : 1,
             rotate: shouldFlyOutside ? 8 : hover ? 4 : 2,
           }}
-          className="border absolute bg-pink-400 border-pink-200 h-20 w-16"
-        >
-          right
-        </motion.div>
+          className="border-4 absolute bg-pink-400 border-white rounded-xl h-20 w-20"
+        ></motion.div>
 
         <motion.div
           animate={{
@@ -36,18 +36,24 @@ const FolderPage = () => {
             scale: shouldFlyOutside ? 1.5 : 1,
             rotate: shouldFlyOutside ? -8 : hover ? -4 : 0,
           }}
-          className="border absolute bg-pink-200 border-pink-200 h-20 w-16"
-        >
-          left
-        </motion.div>
+          style={{
+            backgroundImage: "https://picsum.photos/100/200",
+          }}
+          className="absolute border-white border-4 bg-green-500 rounded-xl h-20 w-20"
+        ></motion.div>
 
         <motion.div
           animate={{
             transform: shouldFlyOutside
-              ? "perspective(1600px) rotateX(-50deg)"
+              ? "perspective(600px) rotateX(-50deg)"
               : "rotateZ(0deg)",
+            transformOrigin: "bottom",
           }}
-          className="border absolute bg-yellow-500 border-pink-200 h-20 bottom-0 w-full"
+          style={{
+            backgroundImage:
+              "linear-gradient(to bottom, #efe309, #efd706, #efcc08, #edc00c, #ebb512)",
+          }}
+          className="border border-yellow-500 rounded-xl absolute  h-20 bottom-0 w-full"
         ></motion.div>
       </div>
     </div>
