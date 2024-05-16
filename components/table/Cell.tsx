@@ -36,7 +36,7 @@ const DataTableCell = ({
             <PiDotsSixVerticalLight size={20} />
             <input
               type="checkbox"
-              checked={selectedData.includes(row)}
+              checked={selectedData.find((item: any) => item.id === row.id)}
               onChange={() => handleSelect(row)}
             />
             {column.row({ row })}

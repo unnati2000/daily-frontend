@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { DndContext } from "@dnd-kit/core";
-import { PiDotsSixVerticalLight } from "react-icons/pi";
-import { CgEye } from "react-icons/cg";
 
 import {
   arrayMove,
@@ -48,6 +46,66 @@ const initialRows = [
     name: "Unnati Bamania",
     email: "unnatibamania8@gmail.com",
     rollNo: 3,
+  },
+  {
+    id: 4,
+    name: "Alice Smith",
+    email: "alice@example.com",
+    rollNo: 4,
+  },
+  {
+    id: 5,
+    name: "Bob Johnson",
+    email: "bob@example.com",
+    rollNo: 5,
+  },
+  {
+    id: 6,
+    name: "Charlie Brown",
+    email: "charlie@example.com",
+    rollNo: 6,
+  },
+  {
+    id: 7,
+    name: "David Wilson",
+    email: "david@example.com",
+    rollNo: 7,
+  },
+  {
+    id: 8,
+    name: "Eva Green",
+    email: "eva@example.com",
+    rollNo: 8,
+  },
+  {
+    id: 9,
+    name: "Frank White",
+    email: "frank@example.com",
+    rollNo: 9,
+  },
+  {
+    id: 10,
+    name: "Grace Black",
+    email: "grace@example.com",
+    rollNo: 10,
+  },
+  {
+    id: 11,
+    name: "Hannah Blue",
+    email: "hannah@example.com",
+    rollNo: 11,
+  },
+  {
+    id: 12,
+    name: "Ian Red",
+    email: "ian@example.com",
+    rollNo: 12,
+  },
+  {
+    id: 13,
+    name: "Jack Green",
+    email: "jack@example.com",
+    rollNo: 13,
   },
 ];
 
@@ -131,7 +189,7 @@ const Table = () => {
   const [columnHover, setColumnHover] = useState(false);
 
   return (
-    <div className="h-screen w-full flex flex-col items-start justify-center px-14">
+    <div className="h-screen w-full flex flex-col items-start justify-start p-14">
       <DndContext
         collisionDetection={closestCenter}
         modifiers={[restrictToHorizontalAxis]}

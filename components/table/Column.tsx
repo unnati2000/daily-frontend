@@ -5,8 +5,8 @@ import { Menu } from "@mantine/core";
 
 import { CgEye } from "react-icons/cg";
 import { TbTableColumn } from "react-icons/tb";
-
 import { PiDotsSixVerticalLight } from "react-icons/pi";
+import { IoChevronUp, IoChevronDown } from "react-icons/io5";
 
 const DataTableColumn = ({
   column,
@@ -46,7 +46,7 @@ const DataTableColumn = ({
       style={style}
     >
       <div className={"flex items-center justify-between gap-4 color-white"}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <PiDotsSixVerticalLight size={20} {...attributes} {...listeners} />
           {isFirst === 0 ? (
             <div className="flex gap-2">
@@ -68,6 +68,11 @@ const DataTableColumn = ({
           ) : (
             column.label
           )}
+
+          <div className="flex flex-col  cursor-pointer">
+            <IoChevronUp size={10} />
+            <IoChevronDown size={10} />
+          </div>
         </div>
 
         {isLast ? (
