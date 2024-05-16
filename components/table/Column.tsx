@@ -1,19 +1,22 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
+import { Menu } from "@mantine/core";
+
 import { CgEye } from "react-icons/cg";
+import { TbTableColumn } from "react-icons/tb";
 
 import { PiDotsSixVerticalLight } from "react-icons/pi";
 
 const DataTableColumn = ({
   column,
-  index,
   selectedData,
   setSelectedData,
   rows,
   handleHide,
   isFirst,
   isLast,
+  columns,
 }: any) => {
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useSortable({
@@ -67,7 +70,28 @@ const DataTableColumn = ({
           )}
         </div>
 
-        <div className="h-8 w-0.5 cursor-col-resize border" />
+        {isLast ? (
+          <Menu width={"160px"}>
+            <Menu.Target>
+              <button>
+                <TbTableColumn size={24} />
+              </button>
+            </Menu.Target>
+            <Menu.Dropdown>
+              {columns.map((column: any) => (
+                <Menu.Item
+                  key={column.id}
+                  onClick={() => handleHide(column)}
+                  rightSection={<CgEye size={16} />}
+                >
+                  {column.label}
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
+          </Menu>
+        ) : (
+          <div className="h-8 w-0.5 cursor-col-resize border" />
+        )}
       </div>
     </th>
   );

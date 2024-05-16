@@ -89,9 +89,15 @@ const Table = () => {
   };
 
   const handleHide = (column: any) => {
-    setVisibleColumns((prev: any) =>
-      prev.filter((item: any) => item.id !== column.id)
-    );
+    if (visibleColumns.length === 1) return;
+
+    if (visibleColumns.find((item) => item.id === column.id)) {
+      setVisibleColumns((prev: any) =>
+        prev.filter((item: any) => item.id !== column.id)
+      );
+    } else {
+      setVisibleColumns((prev: any) => [...prev, column]);
+    }
   };
 
   const handleColumnDragEnd = (event: any) => {
@@ -125,7 +131,7 @@ const Table = () => {
   const [columnHover, setColumnHover] = useState(false);
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center px-14">
+    <div className="h-screen w-full flex flex-col items-start justify-center px-14">
       <DndContext
         collisionDetection={closestCenter}
         modifiers={[restrictToHorizontalAxis]}
@@ -154,6 +160,7 @@ const Table = () => {
                     isFirst={index === 0}
                     isLast={index === visibleColumns.length - 1}
                     handleHide={handleHide}
+                    columns={tableColumns}
                   />
                 ))}
               </tr>
@@ -166,7 +173,7 @@ const Table = () => {
             sensors={sensors}
           >
             <SortableContext
-              items={rows}
+              items={rows.map((row) => row.id)}
               strategy={verticalListSortingStrategy}
             >
               <tbody role="rowgroup">
