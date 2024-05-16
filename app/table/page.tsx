@@ -43,6 +43,12 @@ const initialRows = [
     email: "jane@example.com",
     rollNo: 2,
   },
+  {
+    id: 3,
+    name: "Unnati Bamania",
+    email: "unnatibamania8@gmail.com",
+    rollNo: 3,
+  },
 ];
 
 const tableColumns = [

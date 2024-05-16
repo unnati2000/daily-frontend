@@ -43,31 +43,29 @@ const DataTableColumn = ({
       style={style}
     >
       <div className={"flex items-center justify-between gap-4 color-white"}>
-        <PiDotsSixVerticalLight size={20} {...attributes} {...listeners} />
-        {isFirst === 0 ? (
-          <div className="flex gap-2">
-            {selectedData.length > 0 ? (
-              <input
-                type="checkbox"
-                checked={rows.length === selectedData.length}
-                onChange={() => {
-                  if (selectedData.length === rows.length) {
-                    setSelectedData([]);
-                  } else {
-                    setSelectedData(rows);
-                  }
-                }}
-              />
-            ) : null}
-            {column.label}
-          </div>
-        ) : (
-          column.label
-        )}
-
-        {/* {column.enableHiding && (
-          <CgEye size={16} onClick={() => handleHide(column)} />
-        )} */}
+        <div className="flex items-center gap-2">
+          <PiDotsSixVerticalLight size={20} {...attributes} {...listeners} />
+          {isFirst === 0 ? (
+            <div className="flex gap-2">
+              {selectedData.length > 0 ? (
+                <input
+                  type="checkbox"
+                  checked={rows.length === selectedData.length}
+                  onChange={() => {
+                    if (selectedData.length === rows.length) {
+                      setSelectedData([]);
+                    } else {
+                      setSelectedData(rows);
+                    }
+                  }}
+                />
+              ) : null}
+              {column.label}
+            </div>
+          ) : (
+            column.label
+          )}
+        </div>
 
         <div className="h-8 w-0.5 cursor-col-resize border" />
       </div>
@@ -76,4 +74,3 @@ const DataTableColumn = ({
 };
 
 export default DataTableColumn;
-

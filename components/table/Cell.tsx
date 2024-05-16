@@ -39,6 +39,7 @@ const DataTableCell = ({
               checked={selectedData.includes(row)}
               onChange={() => handleSelect(row)}
             />
+            {column.row({ row })}
           </div>
         ) : (
           column.row({ row })
@@ -49,4 +50,3 @@ const DataTableCell = ({
 };
 
 export default DataTableCell;
-
