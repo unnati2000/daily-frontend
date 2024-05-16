@@ -9,9 +9,13 @@ import {
   arrayMove,
   SortableContext,
   horizontalListSortingStrategy,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import {
+  restrictToHorizontalAxis,
+  restrictToVerticalAxis,
+} from "@dnd-kit/modifiers";
 
 import { closestCenter } from "@dnd-kit/core";
 
@@ -23,10 +27,10 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import SortableRow from "@/components/table/Row";
+import DataTableColumn from "@/components/table/Column";
 
-const rows = [
+const initialRows = [
   {
     id: 1,
     name: "John Doe",
@@ -67,8 +71,8 @@ const tableColumns = [
 
 const Table = () => {
   const [selectedData, setSelectedData] = useState<any[]>([]);
-
   const [visibleColumns, setVisibleColumns] = useState(tableColumns);
+  const [rows, setRows] = useState(initialRows);
 
   const handleSelect = (row: any) => {
     if (selectedData.includes(row)) {
@@ -84,29 +88,55 @@ const Table = () => {
     );
   };
 
+  const handleColumnDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setVisibleColumns((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const handleRowDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setRows((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   );
 
+  const [columnHover, setColumnHover] = useState(false);
+
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center">
+    <div className="h-screen w-full flex flex-col items-center justify-center px-14">
       <DndContext
         collisionDetection={closestCenter}
         modifiers={[restrictToHorizontalAxis]}
-        onDragEnd={() => {
-          console.log("yess");
-        }}
-        // sensors={sensors}
+        onDragEnd={handleColumnDragEnd}
+        sensors={sensors}
       >
-        <table className="border" role="table">
-          <thead className="border">
-            <tr role="row">
-              <SortableContext
-                items={visibleColumns}
-                strategy={horizontalListSortingStrategy}
-              >
+        <table className="w-full" role="table">
+          <thead
+            className="bg-zinc-900"
+            onMouseEnter={() => setColumnHover(true)}
+            onMouseLeave={() => setColumnHover(false)}
+          >
+            <SortableContext
+              items={visibleColumns}
+              strategy={horizontalListSortingStrategy}
+            >
+              <tr role="row">
                 {visibleColumns.map((column: any, index: any) => (
                   <DataTableColumn
                     key={column.id}
@@ -115,145 +145,42 @@ const Table = () => {
                     selectedData={selectedData}
                     setSelectedData={setSelectedData}
                     rows={rows}
+                    isFirst={index === 0}
+                    isLast={index === visibleColumns.length - 1}
                     handleHide={handleHide}
                   />
                 ))}
-              </SortableContext>
-            </tr>
-          </thead>
-          <tbody role="rowgroup">
-            {rows.map((row: any) => (
-              <tr role="row" key={row.id}>
-                {visibleColumns.map((column: any, index: any) => (
-                  <SortableContext
-                    key={column.id}
-                    items={visibleColumns}
-                    strategy={horizontalListSortingStrategy}
-                  >
-                    <DataTableCell
-                      column={column}
-                      index={index}
-                      handleSelect={handleSelect}
-                      selectedData={selectedData}
-                      row={row}
-                    />
-                  </SortableContext>
-                ))}
               </tr>
-            ))}
-          </tbody>
+            </SortableContext>
+          </thead>
+          <DndContext
+            collisionDetection={closestCenter}
+            modifiers={[restrictToVerticalAxis]}
+            onDragEnd={handleRowDragEnd}
+            sensors={sensors}
+          >
+            <SortableContext
+              items={rows}
+              strategy={verticalListSortingStrategy}
+            >
+              <tbody role="rowgroup">
+                {rows.map((row: any) => (
+                  <SortableRow
+                    key={row.id}
+                    row={row}
+                    visibleColumns={visibleColumns}
+                    handleSelect={handleSelect}
+                    selectedData={selectedData}
+                    columnHover={columnHover}
+                  />
+                ))}
+              </tbody>
+            </SortableContext>
+          </DndContext>
         </table>
       </DndContext>
     </div>
   );
 };
 
-const DataTableColumn = ({
-  column,
-  index,
-  selectedData,
-  setSelectedData,
-  rows,
-  handleHide,
-}: any) => {
-  const { attributes, isDragging, listeners, setNodeRef, transform } =
-    useSortable({
-      id: column.id,
-    });
-
-  const style = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    whiteSpace: "nowrap",
-    // width: header.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <>
-      <th
-        className="p-4 border"
-        tabIndex={column.id}
-        role="columnheader"
-        key={column.id}
-        ref={setNodeRef}
-        style={style}
-      >
-        <div className="flex items-center justify-between gap-4 color-white">
-          <PiDotsSixVerticalLight size={20} {...attributes} {...listeners} />
-
-          {index === 0 ? (
-            <div className="flex gap-2">
-              {selectedData.length > 0 ? (
-                <input
-                  type="checkbox"
-                  checked={rows.length === selectedData.length}
-                  onChange={() => {
-                    if (selectedData.length === rows.length) {
-                      setSelectedData([]);
-                    } else {
-                      setSelectedData(rows);
-                    }
-                  }}
-                />
-              ) : null}
-
-              {column.label}
-            </div>
-          ) : (
-            column.label
-          )}
-
-          {column.enableHiding && <CgEye size={16} />}
-        </div>
-      </th>
-    </>
-  );
-};
-
-const DataTableCell = ({
-  column,
-  index,
-  handleSelect,
-  selectedData,
-  row,
-}: any) => {
-  const { isDragging, setNodeRef, transform } = useSortable({
-    id: column.id,
-  });
-
-  const style = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    // width: cell.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-  return (
-    <td
-      className="p-3 border"
-      role="cell"
-      key={column.id}
-      ref={setNodeRef}
-      style={style}
-    >
-      <div className="flex gap-2">
-        {index === 0 ? (
-          <input
-            type="checkbox"
-            checked={selectedData.includes(row)}
-            onChange={() => handleSelect(row)}
-          />
-        ) : null}
-
-        {column.row({ row })}
-      </div>
-    </td>
-  );
-};
-
 export default Table;
-
