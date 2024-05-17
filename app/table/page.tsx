@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { DndContext } from "@dnd-kit/core";
 
+import { AnimatePresence } from "framer-motion";
+
 import {
   arrayMove,
   SortableContext,
@@ -107,6 +109,18 @@ const initialRows = [
     email: "jack@example.com",
     rollNo: 13,
   },
+  {
+    id: 14,
+    name: "Jack Green",
+    email: "jack@example.com",
+    rollNo: 14,
+  },
+  {
+    id: 15,
+    name: "Jack Green",
+    email: "jack@example.com",
+    rollNo: 15,
+  },
 ];
 
 const tableColumns = [
@@ -139,7 +153,7 @@ const Table = () => {
   const [rows, setRows] = useState(initialRows);
 
   const handleSelect = (row: any) => {
-    if (selectedData.includes(row)) {
+    if (selectedData.find((item) => item.id === row.id)) {
       setSelectedData((prev) => prev.filter((item) => item.id !== row.id));
     } else {
       setSelectedData((prev) => [...prev, row]);
@@ -189,67 +203,73 @@ const Table = () => {
   const [columnHover, setColumnHover] = useState(false);
 
   return (
-    <div className="h-screen w-full flex flex-col items-start justify-start p-14">
-      <DndContext
-        collisionDetection={closestCenter}
-        modifiers={[restrictToHorizontalAxis]}
-        onDragEnd={handleColumnDragEnd}
-        sensors={sensors}
-      >
-        <table className="w-full" role="table">
-          <thead
-            className="bg-zinc-900"
-            onMouseEnter={() => setColumnHover(true)}
-            onMouseLeave={() => setColumnHover(false)}
-          >
-            <SortableContext
-              items={visibleColumns}
-              strategy={horizontalListSortingStrategy}
+    <div className="overflow-hidden m-8 border w-full flex flex-col items-start relative justify-start">
+      <AnimatePresence>
+        <DndContext
+          collisionDetection={closestCenter}
+          modifiers={[restrictToHorizontalAxis]}
+          onDragEnd={handleColumnDragEnd}
+          sensors={sensors}
+        >
+          <table className="w-full" role="table">
+            <thead
+              className="bg-zinc-900"
+              onMouseEnter={() => setColumnHover(true)}
+              onMouseLeave={() => setColumnHover(false)}
             >
-              <tr role="row">
-                {visibleColumns.map((column: any, index: any) => (
-                  <DataTableColumn
-                    key={column.id}
-                    column={column}
-                    index={index}
-                    selectedData={selectedData}
-                    setSelectedData={setSelectedData}
-                    rows={rows}
-                    isFirst={index === 0}
-                    isLast={index === visibleColumns.length - 1}
-                    handleHide={handleHide}
-                    columns={tableColumns}
-                  />
-                ))}
-              </tr>
-            </SortableContext>
-          </thead>
-          <DndContext
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis]}
-            onDragEnd={handleRowDragEnd}
-            sensors={sensors}
-          >
-            <SortableContext
-              items={rows.map((row) => row.id)}
-              strategy={verticalListSortingStrategy}
+              <SortableContext
+                items={visibleColumns}
+                strategy={horizontalListSortingStrategy}
+              >
+                <tr role="row">
+                  {visibleColumns.map((column: any, index: any) => (
+                    <DataTableColumn
+                      key={column.id}
+                      column={column}
+                      index={index}
+                      selectedData={selectedData}
+                      setSelectedData={setSelectedData}
+                      rows={rows}
+                      isFirst={index === 0}
+                      isLast={index === visibleColumns.length - 1}
+                      handleHide={handleHide}
+                      columns={tableColumns}
+                    />
+                  ))}
+                </tr>
+              </SortableContext>
+            </thead>
+            <DndContext
+              collisionDetection={closestCenter}
+              modifiers={[restrictToVerticalAxis]}
+              onDragEnd={handleRowDragEnd}
+              sensors={sensors}
             >
-              <tbody role="rowgroup">
-                {rows.map((row: any) => (
-                  <SortableRow
-                    key={row.id}
-                    row={row}
-                    visibleColumns={visibleColumns}
-                    handleSelect={handleSelect}
-                    selectedData={selectedData}
-                    columnHover={columnHover}
-                  />
-                ))}
-              </tbody>
-            </SortableContext>
-          </DndContext>
-        </table>
-      </DndContext>
+              <SortableContext
+                items={rows.map((row) => row.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <tbody role="rowgroup">
+                  {rows.map((row: any) => (
+                    <SortableRow
+                      key={row.id}
+                      row={row}
+                      visibleColumns={visibleColumns}
+                      handleSelect={handleSelect}
+                      selectedData={selectedData}
+                      columnHover={columnHover}
+                    />
+                  ))}
+                </tbody>
+              </SortableContext>
+            </DndContext>
+          </table>
+        </DndContext>
+
+        <div className="absolute w-3/4 left-1/2 -translate-x-1/2 bottom-14 p-3 bg-zinc-800 rounded-lg backdrop:blur-4">
+          Table actions
+        </div>
+      </AnimatePresence>
     </div>
   );
 };

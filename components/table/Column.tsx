@@ -7,6 +7,9 @@ import { CgEye } from "react-icons/cg";
 import { TbTableColumn } from "react-icons/tb";
 import { PiDotsSixVerticalLight } from "react-icons/pi";
 import { IoChevronUp, IoChevronDown } from "react-icons/io5";
+import { Checkbox } from "@mantine/core";
+
+import { motion } from "framer-motion";
 
 const DataTableColumn = ({
   column,
@@ -45,14 +48,34 @@ const DataTableColumn = ({
       ref={setNodeRef}
       style={style}
     >
-      <div className={"flex items-center justify-between gap-4 color-white"}>
+      <motion.div
+        initial={{
+          x: 0,
+          opacity: 0,
+        }}
+        animate={{
+          x: 10,
+          opacity: 1,
+          transition: {
+            duration: 0.5,
+          },
+        }}
+        exit={{
+          x: -10,
+          opacity: 0,
+          transition: {
+            duration: 0.5,
+          },
+        }}
+        className={"flex items-center justify-between gap-4 color-white"}
+      >
         <div className="flex items-center gap-4">
           <PiDotsSixVerticalLight size={20} {...attributes} {...listeners} />
-          {isFirst === 0 ? (
+
+          {isFirst ? (
             <div className="flex gap-2">
               {selectedData.length > 0 ? (
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={rows.length === selectedData.length}
                   onChange={() => {
                     if (selectedData.length === rows.length) {
@@ -78,7 +101,7 @@ const DataTableColumn = ({
         {isLast ? (
           <Menu width={"160px"}>
             <Menu.Target>
-              <button>
+              <button className="p-4">
                 <TbTableColumn size={24} />
               </button>
             </Menu.Target>
@@ -97,7 +120,7 @@ const DataTableColumn = ({
         ) : (
           <div className="h-8 w-0.5 cursor-col-resize border" />
         )}
-      </div>
+      </motion.div>
     </th>
   );
 };
