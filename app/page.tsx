@@ -15,6 +15,10 @@ export default function Home() {
         <li>
           <Link href="/table">Table</Link>
         </li>
+
+        <li>
+          <Link href="/ringtone">Ring tone</Link>
+        </li>
       </ul>
     </main>
   );
