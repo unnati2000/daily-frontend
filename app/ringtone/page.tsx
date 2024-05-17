@@ -21,7 +21,7 @@ const people = [
 const Ringtone = () => {
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center border">
-      <div className="border relative flex w-32 z-1">
+      <div className="relative flex w-32 z-1">
         <div className="absolute left-[40px] -z-2">
           <Avatar url={people[2].avatar} name={people[2].name} index={2} />
         </div>
