@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export const ThreeDot = () => {
   return (
-    <div className="flex gap-1 bg-indigo-500 items-center justify-center  rounded-full w-12 h-8">
+    <div className="flex gap-1 bg-indigo-500 items-center justify-center rounded-full w-12 h-9">
       <Dot delay={0} />
       <Dot delay={0.4} />
       <Dot delay={0.8} />

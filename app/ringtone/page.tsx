@@ -1,4 +1,7 @@
-import { Avatar } from "@/components/ringtone/Avatar";
+// import { Avatar as AvatarG } from "@/components/ringtone/Avatar";
+"use client";
+
+import { Avatar } from "@mantine/core";
 
 import { ThreeDot } from "@/components/ringtone/ThreeDot";
 
@@ -23,20 +26,15 @@ const people = [
 const Ringtone = () => {
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center">
-      <div className="relative flex w-32 z-1">
-        <div className="absolute left-[60px] -z-3">
+      <div className="relative flex z-1">
+        <Avatar.Group>
+          <Avatar src={people[0].avatar} />
+          <Avatar src={people[1].avatar} />
+          <Avatar src={people[2].avatar} />
+        </Avatar.Group>
+        <div className="absolute top-1/2 -translate-y-1/2 left-[70px] -z-3">
           <ThreeDot />
         </div>
-        {/* <div className="absolute left-[40px] -z-2">
-          <Avatar url={people[2].avatar} name={people[2].name} index={2} />
-        </div>
-        <div className="absolute left-[20px] -z-1">
-          <Avatar url={people[1].avatar} name={people[1].name} index={1} />
-        </div>
-
-        <div className="absolute z-1">
-          <Avatar url={people[0].avatar} name={people[0].name} index={0} />
-        </div> */}
       </div>
     </div>
   );
