@@ -19,6 +19,10 @@ export default function Home() {
         <li>
           <Link href="/ringtone">Ring tone</Link>
         </li>
+
+        <li>
+          <Link href="/mentions">Mentions</Link>
+        </li>
       </ul>
     </main>
   );
